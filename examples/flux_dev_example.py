@@ -3,9 +3,9 @@ import numpy as np
 import torch
 
 factor = 0. # an edit strengh factor. factor should normally be between 0 and 1
-target_edit_token = 'woman'
+target_edit_token = 'man'
 variation_path = "src/variations/smiling_man.yaml"
-source_sentence = "a portrait of a woman riding a donkey in the snow"
+source_sentence = "a portrait of a man riding a donkey in the snow"
 seed = 42
 with open(variation_path, "r") as f:
     variation_data = yaml.safe_load(f)
