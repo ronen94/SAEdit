@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ## Usage
 To run our method, insert the SAEdit block as a callback function as can be seen bellow, and in the example subfolder.
-'''
+```
 from src.saedit import SAEditCallback
 import numpy as np
 import torch
@@ -62,7 +62,7 @@ out = model(
     callback_on_step_end_tensor_inputs=CALLBACK_ON_STEP_END_INPUT_TENSORS
 )
 out.images[0]
-'''
+```
 
 ## Citation
 If you use this code for your research, please cite the following work: 
