@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAEdit</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBKFF5WPJF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-KBKFF5WPJF');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">SAEdit: Token-Level Control for Continuous Image Editing via Sparse Autoencoder</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a>Ronen Kamenetsky</a><sup>1</sup>&nbsp &nbsp
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=QWY7OskAAAAJ&hl=iw">  Sara Dorfman</a><sup>1</sup>&nbsp &nbsp
+            </span>
+            <span class="author-block">
+              <a href="https://garibida.github.io/danielgaribi/">Daniel Garibi</a><sup>1</sup>&nbsp &nbsp
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=-KSDNZQAAAAJ&hl=en">Roni Paiss</a><sup>2</sup>&nbsp &nbsp
+            </span>
+            <span class="author-block">
+              <a href="https://orpatashnik.github.io/">Or Patashnik</a><sup>1</sup>&nbsp &nbsp
+            </span>
+
+            <span class="author-block">
+              <a href="https://danielcohenor.com/">Daniel Cohen-Or</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Tel-Aviv University</span> &nbsp &nbsp
+            <span class="author-block"><sup>2</sup>Google Deepmind</span>
+          </div>
+
+          <br>
+<!--          <div>-->
+<!--            <h1 class="title">ECCV 2024</h1>-->
+<!--          </div>-->
+          <br>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2510.05081"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://ronen94.github.io/SAEdit/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming soon)</span>
+                  </a>
+              </span>
+<!--              <span class="link-block">-->
+<!--                <a href="https://huggingface.co/spaces/garibida/ReNoise-Inversion"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="fas fa-laptop"></i>-->
+<!--                  </span>-->
+<!--                  <span>Demo</span>-->
+<!--                  </a>-->
+<!--              </span>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+        <img src="static/images/teaser_site.jpg">
+      <h2 class="subtitle has-text-centered">
+            We train a Sparse AutoEncoder (SAE) to lift the text embeddings into a higher-dimensional space, where we identify disentangled semantic directions (e.g. for laughing).
+            These directions can then be applied to specific tokens within the input of a text-to-image model to facilitate continuous image editing.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!--<section class="hero teaser">-->
+<!--  <div class="container is-max-desktop">-->
+<!--    <div class="hero-body">-->
+<!--      <video controls>Your browser does not support the &lt;video&gt; tag.-->
+<!--        <source src="static/images/demo_video.mp4"/>-->
+<!--      </video>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+<section class="section hero is-light is-small">
+    <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+          Large-scale text-to-image diffusion models have become the backbone of modern image editing, yet text prompts alone do not offer adequate control over the editing process.
+          Two properties are especially desirable: disentanglement, where changing one attribute does not unintentionally alter others, and continuous control, where the strength of an edit can be smoothly adjusted.
+          We introduce a method for disentangled and continuous editing through token-level manipulation of text embeddings.
+          The edits are applied by manipulating the embeddings along carefully chosen directions, which control the strength of the target attribute.
+          To identify such directions, we employ a Sparse Autoencoder (SAE), whose sparse latent space exposes semantically isolated dimensions.
+          Our method operates directly on text embeddings without modifying the diffusion process, making it model agnostic and broadly applicable to various image synthesis backbones.
+          Experiments show that it enables intuitive and efficient manipulations with continuous control across diverse attributes and domains.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop is-centered has-text-centered">
+      <h2 class="title is-3">Editing Results on Flux-dev</h2>
+      <div id="results-carousel" class="carousel results-carousel" data-slides-to-show="1">
+          <img src="static/images/editing_results/Slide5.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide1.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide4.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide3.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide2.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide6.JPG" style="width: 80%;">
+          <img src="static/images/editing_results/Slide7.JPG" style="width: 80%;">
+      </div>
+<!--      <img class="my-image" src="static/images/results_cropped.jpg" style="width: 750px;">-->
+  </div>
+</section>
+
+
+<section class="section hero is-light is-small is-centered" style="align-content: center;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Training a Sparse Autoencoder</h2>
+      <img class="my-image" src="static/images/training_gray.png" style="width: 350px;">
+      <div class="content has-text-justified is-centered">
+        <ul class="column is-centered has-text-justified">
+          <li>
+            First we train a Sparse Autoencoder (SAE) to lift the text embeddings into a higher-dimensional space.
+          </li>
+          <li>
+            The SAE is trained in an unsupervised manner, using a combination of reconstruction and sparsity losses.
+          </li>
+          <li>
+            The sparse latent space exposes semantically isolated dimensions, which we identify as disentangled directions.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<section class="section hero is-small is-centered" style="align-content: center;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Finding an edit direction</h2>
+      <img src="static/images/direction.jpg">
+      <div class="content has-text-justified is-centered">
+        <ul class="c column is-centered has-text-justified">
+        <li class="c">
+          Given a pair of text embeddings corresponding to the source and target prompts, we pass them through the SAE encoder to obtain their sparse representations.
+        </li>
+        <li class="c">
+          We apply max pooling to each latent vector and compare the resulting pooled vectors to construct a mask that highlights the most significant entries.
+        </li>
+        <li class="c">
+          Using this mask, we extract the relevant components from the pooled representation of the target prompt, producing the direction \(d\).
+        </li>
+        <li class="c">
+          Repeating this process over \(N\) source–target pairs yields a set of directions \(\{d_i\}_{i=1}^N\). The final edit direction is obtained by applying PCA to \(\{d_i\}_{i=1}^N\).
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section hero is-light is-small is-centered" style="align-content: center;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Applying the edit direction</h2>
+      <img class="my-image" src="static/images/overview_gray.png" style="width: 1000px;">
+      <div class="content has-text-justified is-centered">
+        <ul class="column is-centered has-text-justified">
+        <li>
+          During inference, we modify the latent representation of the token embedding we aim to edit.
+        </li>
+        <li>
+          The modification is done by adding the edit direction obtained in the previous stage.
+        </li>
+        <li>
+          Specifically, we apply \(z' = z + \alpha d\), where \(\alpha\) controls the strength of the edit.
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!--<section class="section hero is-light is-small is-centered" style="align-content: center;">-->
+<!--  <div class="container is-max-desktop">-->
+<!--  <div class="columns is-centered has-text-centered">-->
+<!--    <div class="column is-four-fifths">-->
+<!--      <h2 class="title is-3">Image Reconstruction Results</h2>-->
+<!--      <div class="content has-text-justified is-centered">-->
+<!--        <p style="text-align: center;">-->
+<!--          Image reconstruction results comparing sampler reversing inversion techniques across different samplers (e.g., vanilla DDIM inversion) with our ReNoise method using the same sampler.-->
+<!--          The number of denoising steps remains constant. However, the number of UNet passes varies, with the sampler reversing approach increasing the number of inversion steps, while our method increases the number of renoising iterations.-->
+<!--          We present various configuration options for our method, including options with or without edit enhancement loss and Noise Correction (NC).-->
+<!--        </p>-->
+<!--        <br>-->
+<!--        <img src="static/images/Graphs.png" style="width: 100%;">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</section>-->
+<section class="section">
+  <div class="container is-max-desktop is-centered has-text-centered">
+      <h2 class="title is-3">More Results</h2>
+      <img class="my-image" src="static/images/additional_results.png" style="width: 1450px;">
+      <div class="content has-text-justified is-centered">
+        <ul class="column is-centered has-text-justified">
+        <li>
+          By adding the directions found by our method to a specific token (e.g 'man'), our method can steer the image generation towards different attributes, such as 'smile', 'old', 'angry', and 'surprised'.
+        </li>
+        <li>
+          In every column, we apply the same direction \(d\) on different prompts, demonstrating the generalization ability of our method.
+        </li>
+        </ul>
+      </div>
+  </div>
+</section>
+
+
+<section class="section is-light" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @misc{kamenetsky2025saedittokenlevelcontrolcontinuous,
+      title={SAEdit: Token-level control for continuous image editing via Sparse AutoEncoder},
+      author={Ronen Kamenetsky and Sara Dorfman and Daniel Garibi and Roni Paiss and Or Patashnik and Daniel Cohen-Or},
+      year={2025},
+      eprint={2510.05081},
+      archivePrefix={arXiv},
+      primaryClass={cs.GR},
+      url={https://arxiv.org/abs/2510.05081},
+}
+    </code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Website source code based on the <a href="https://nerfies.github.io/">Nerfies</a> project page. If you want to reuse their <a href="https://github.com/nerfies/nerfies.github.io">source code</a>, please credit them appropriately.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

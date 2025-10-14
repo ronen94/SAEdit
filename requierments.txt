@@ -1,0 +1,7 @@
+zarr==2.16.1
+bitsandbytes==0.45.5
+torch==2.4.1
+accelerate==1.0.1
+sentencepiece==0.2.0
+transformers==4.46.3
+diffusers==0.33.1
