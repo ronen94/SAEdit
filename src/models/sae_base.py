@@ -61,3 +61,60 @@ class BaseAutoencoder(nn.Module):
 
     def encode(self, x):
         raise NotImplementedError("Encode method must be implemented by subclasses")
+
+    def save_pretrained(self, save_directory):
+        os.makedirs(save_directory, exist_ok=True)
+        torch.save(self.state_dict(), os.path.join(save_directory, "pytorch_model.bin"))
+        import json
+        with open(os.path.join(save_directory, "config.json"), "w") as f:
+            json.dump(self.config, f)
+
+    @classmethod
+    def from_pretrained(cls, load_directory, device="cuda", cache_dir=None):
+        import json
+        import os
+        
+        # Check if it's a local path or a HF repo
+        if os.path.isdir(load_directory):
+            # Local directory
+            local_path = load_directory
+        else:
+            # Assume it's a HuggingFace repo ID
+            try:
+                from huggingface_hub import snapshot_download
+                print(f"Downloading from HuggingFace: {load_directory}")
+                local_path = snapshot_download(
+                    repo_id=load_directory,
+                    cache_dir=cache_dir
+                )
+                local_path = os.path.join(local_path, 'matryoshka_sae_top_300' )
+            except ImportError:
+                raise ImportError(
+                    "huggingface_hub is required to load from HuggingFace. "
+                    "Install it with: pip install huggingface_hub"
+                )
+            except Exception as e:
+                raise ValueError(
+                    f"Could not load from '{load_directory}'. "
+                    f"Please provide a valid local path or HuggingFace repo ID. "
+                    f"Error: {e}"
+                )
+        
+        # Load config
+        config_path = os.path.join(local_path, "config.json")
+        with open(config_path, "r") as f:
+            config = json.load(f)
+        
+        # Initialize model
+        model = cls(config)
+        
+        # Load weights
+        model_path = os.path.join(local_path, "pytorch_model.bin")
+        checkpoint = torch.load(model_path, map_location="cpu")
+        model.load_state_dict(checkpoint)
+        
+        # Move to device
+        model.to(device)
+        model.eval()
+        
+        return model

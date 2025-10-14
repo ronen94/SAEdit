@@ -17,9 +17,7 @@ class MatryoshkaTrainer:
                  train_data: Dataset,
                  val_data: Dataset,
                  cfg, device: str="cuda"):
-        torch.manual_seed(cfg.seed)
-        random.seed(cfg.seed)
-        np.random.seed(cfg.seed)
+        self.set_seeds(cfg.seed)
         self.device = device
         self.model = model.to(self.device)
         self.data_loader_workers = cfg['data_loader_workers']
@@ -32,11 +30,17 @@ class MatryoshkaTrainer:
         self.snapshot_path = os.path.join(full_result_path, "snapshot.pt")
         self.cfg = cfg
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=cfg["lr"], betas=(cfg["beta1"], cfg["beta2"]))
-        self.cur_iteration = 0
-        self.iter_ct = 0
+        self.cur_batch_iterations = 0
+        self.total_iterations = 0 
         if os.path.exists(self.snapshot_path):
             print(f"Loading snapshot from: {self.snapshot_path}")
             self._load_snapshot(self.snapshot_path)
+
+    @staticmethod
+    def set_seeds(seed):
+        torch.manual_seed(seed)
+        random.seed(seed)
+        np.random.seed(seed)
 
 
 
@@ -58,7 +62,7 @@ class MatryoshkaTrainer:
             'model_state_dict': self.model.state_dict(),
             'cur_iteration': cur_iteration,
             'optimizer': self.optimizer.state_dict(),
-            'iter_ct' : self.iter_ct
+            'iter_ct' : self.total_iterations
         }
         torch.save(snapshot, snapshot_path)
 
@@ -66,11 +70,11 @@ class MatryoshkaTrainer:
         if os.path.exists(snapshot_path):
             snapshot = torch.load(snapshot_path, map_location='cpu')
             self.model.load_state_dict(snapshot['model_state_dict'])
-            self.cur_iteration = snapshot['cur_iteration']
+            self.cur_batch_iterations = snapshot['cur_iteration']
             self.optimizer.load_state_dict(snapshot['optimizer'])
             if 'iter_ct' in snapshot:
-                self.iter_ct = snapshot['iter_ct']
-            print(f"Loaded snapshot from {snapshot_path}, starting from iteration {self.cur_iteration}.")
+                self.total_iterations = snapshot['iter_ct']
+            print(f"Loaded snapshot from {snapshot_path}, starting from iteration {self.cur_batch_iterations}.")
         else:
             print(f"No snapshot found at {snapshot_path}. Starting fresh.")
 
@@ -103,25 +107,25 @@ class MatryoshkaTrainer:
         epoch = 0
         while epoch < config["num_epochs"]:
             dataset = create_dataset(dataset_path=config['dataset_path'], cache_size=config.train_cache_size)
-            train_dataset = Subset(dataset, range(self.cur_iteration * config.batch_size, len(dataset) - config.val_data_size))
+            train_dataset = Subset(dataset, range(self.cur_batch_iterations * config.batch_size, len(dataset) - config.val_data_size))
             self.train_data = self.prepare_dataloader(train_dataset, self.cfg['batch_size'])
             epoch += 1
             for i, batch in enumerate(self.train_data):
-                self.iter_ct += 1
+                self.total_iterations += 1
                 outputs = self._run_batch(inputs=batch)
-                if self.iter_ct % self.log_every == 0:
+                if self.total_iterations % self.log_every == 0:
                     new_cur_time = time.time()
-                    self.train_log(outputs, iter_ct=self.iter_ct, epoch=epoch, time=new_cur_time - cur_time)
+                    self.train_log(outputs, iter_ct=self.total_iterations, epoch=epoch, time=new_cur_time - cur_time)
                     cur_time = new_cur_time
-                if self.iter_ct % self.save_every == 0 and i > 0:
-                    self.cur_iteration = i
+                if self.total_iterations % self.save_every == 0 and i > 0:
+                    self.cur_batch_iterations = i
                     self._save_snapshot(i)
                     val_loss = self.get_validation_loss()
-                    wandb.log({"validation_loss": val_loss}, step=self.iter_ct)
+                    wandb.log({"validation_loss": val_loss}, step=self.total_iterations)
                     torch.cuda.empty_cache()
-                if self.iter_ct % 3000 == 0 and self.iter_ct > 0:
+                if self.total_iterations % 3000 == 0 and self.total_iterations > 0:
                     saved_snapshot_path = self.snapshot_path.replace(".pt", f"_{i}.pt")
-                    self._save_snapshot(self.iter_ct, snapshot_path=saved_snapshot_path)
+                    self._save_snapshot(self.total_iterations, snapshot_path=saved_snapshot_path)
 
 
     def prepare_dataloader(self, dataset: Dataset, batch_size: int):
