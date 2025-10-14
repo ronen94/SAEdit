@@ -1,13 +1,22 @@
 import torch
 from typing import List, Optional,Tuple
 import torch.nn as nn
-
+from diffusers import DiffusionPipeline
 CALLBACK_ON_STEP_END_INPUT_TENSORS = ['prompt_embeds']
 
 
 class SAEditCallback:
-    def __init__(self, pipeline, sae: nn.Module, source_tokens_to_edit: List[str], factor: float, sentence_pairs: List[Tuple[str, str]],
-                 prompt: str = None, max_sequence_length: int = 256, ratio_percentile: float = 99.5, min_target_percentile: float = 90.0,
+    def __init__(
+                 self, 
+                 pipeline: DiffusionPipeline,
+                 sae: nn.Module,
+                 source_tokens_to_edit: List[str],
+                 factor: float, 
+                 sentence_pairs: List[Tuple[str, str]],
+                 prompt: str = None,
+                 max_sequence_length: int = 256, 
+                 ratio_percentile: float = 99.5, 
+                 min_target_percentile: float = 90.0,
                  aggregate: str = "pca"):
         """
         Args:
@@ -37,6 +46,20 @@ class SAEditCallback:
 
     @staticmethod
     def calculate_factor(factor):
+        """
+        Calculate interpolation factors for gradual editing.
+        
+        Args:
+            factor: Base edit strength factor (typically 0-1 though can exceed 1 at some cases )
+        
+        Returns:
+            Array of interpolation factors for each diffusion step
+        
+        Example:
+            >>> factors = calculate_factor(0.5)
+            >>> print(factors.shape)
+            (40,)
+        """
         factor *= 15
         limit = factor
         interpolation_factors = np.linspace(0, 40, num=40) / 40.

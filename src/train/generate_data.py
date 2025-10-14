@@ -52,6 +52,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Generate T5 embeddings in distributed mode")
     parser.add_argument("--text_encoder_path", type=str, required=True, help="Path to the pretrained T5 encoder")
     parser.add_argument("--output_base", type=str, required=True, help="Base output directory for embeddings")
+    parser.add_argument("--data_output_len", type=int, default=800_000_000, help="The length of the dataset created")
     return parser.parse_args()
 
 def main():
@@ -63,7 +64,7 @@ def main():
     local_rank = int(os.environ.get("LOCAL_RANK", 0))
     world_size = int(os.environ.get("WORLD_SIZE", 1))
     # Config
-    data_row_number = 800_000_000
+    data_row_number = args.data_output_len
     text_encoder_path = args.text_encoder_path
     output_base = args.output_base
     
@@ -157,6 +158,7 @@ def main():
         
         if cur_cache_idx + rows_to_add >= cache_end_idx:
             rows_to_add = cache_end_idx - cur_cache_idx
+            batch = batch[:rows_to_add]
         
         if rows_to_add <= 0:
             break
