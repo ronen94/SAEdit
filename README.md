@@ -109,7 +109,7 @@ python src/train/train.py --cfg src/train/configs/train_matryoshka_topk_300_dict
 
 
 ## Acknowledgements 
-This code builds on the code from the [diffusers](https://github.com/huggingface/diffusers) library. In addition for defining and training SAE's code was borrowed from [Matryoshka_sae](https://github.com/bartbussmann/matryoshka_sae)
+This code builds on the code from the [diffusers](https://github.com/huggingface/diffusers) library. In addition for defining and training the SAE code was borrowed from [Matryoshka_sae](https://github.com/bartbussmann/matryoshka_sae)
 
 ## Citation
 If you use this code for your research, please cite the following work: 
