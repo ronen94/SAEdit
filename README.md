@@ -33,8 +33,12 @@ from diffusers import FluxPipeline
 from saedit import SAEditCallback
 
 def main():
-    # Load model
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    prompt = "a portrait of a man riding a donkey in the snow"
+    sentence_pair_paths = "configs/variations/smiling_man.yaml"
+    tokens_to_edit = ['man']
+
+    # Load model
     model = FluxPipeline.from_pretrained(
         "black-forest-labs/FLUX.1-dev",
         torch_dtype=torch.bfloat16
@@ -45,23 +49,23 @@ def main():
                                         "Ronenk94/T5_matryoshka_sae",
                                          device="cuda")    
     # Load variation configuration
-    with open("configs/variations/smiling_man.yaml", "r") as f:
-        variation_data = yaml.safe_load(f)
+    with open(sentence_pair_paths, "r") as f:
+        sentence_pairs = yaml.safe_load(f)
     
     # Create SAEdit callback
     callback = SAEditCallback(
         pipeline=model,
         sae=sae,
-        source_tokens_to_edit=["man"],
+        prompt=prompt,
+        source_tokens_to_edit=tokens_to_edit,
         factor=0.8, # set 0 to retrieve original image
-        sentence_pairs=variation_data["sentence_pairs"],
-        prompt="a portrait of a man riding a donkey in the snow",
+        sentence_pairs=sentence_pairs["sentence_pairs"],
         max_sequence_length=256
     )
     
     # Generate image
     output = model(
-        prompt="a portrait of a man riding a donkey in the snow",
+        prompt=prompt,
         guidance_scale=3.5,
         height=1024,
         width=1024,
@@ -81,8 +85,9 @@ if __name__ == "__main__":
 ```
 
 ## Training
-We have made the [weights](https://huggingface.co/Ronenk94/T5_matryoshka_sae_top_300) of our model public in hugging face
-Training a new SAE model consists of two main steps:
+We have made the [weights](https://huggingface.co/Ronenk94/T5_matryoshka_sae_top_300) of our model public in hugging face.
+
+To train a new SAE model two steps are required:
 
 ### Step 1: Generate Embedding Dataset
 

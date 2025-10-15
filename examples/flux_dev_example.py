@@ -4,10 +4,28 @@ Basic example of using SAEdit for image editing.
 """
 import torch
 import yaml
+import argparse
 from diffusers import FluxPipeline
 from saedit import SAEditCallback
 
-def main():
+def parse_args():
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="SAEdit image generation with configurable parameters")
+    parser.add_argument("--variation_path", type=str, required=True, 
+                       help="Path to the variation YAML configuration file")
+    parser.add_argument("--prompt", type=str, required=True,
+                       help="Text prompt for image generation")
+    parser.add_argument("--factor", type=float, default=0.,
+                       help="SAEdit factor (set 0 to retrieve original image)")
+    parser.add_argument("--source_tokens", type=str, nargs='+', required=True,
+                       help="Source tokens to edit (space-separated list)")
+    parser.add_argument("--output", type=str, default="output.png",
+                       help="Output image filename (default: output.png)")
+    
+    return parser.parse_args()
+
+def main(args):
+    
     # Load model
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = FluxPipeline.from_pretrained(
@@ -21,23 +39,23 @@ def main():
                                          device="cuda")
     
     # Load variation configuration
-    with open("configs/variations/smiling_man.yaml", "r") as f:
+    with open(args.variation_path, "r") as f:
         variation_data = yaml.safe_load(f)
     
     # Create SAEdit callback
     callback = SAEditCallback(
         pipeline=model,
         sae=sae,
-        source_tokens_to_edit=["man"],
-        factor=0.8, # set 0 to retrieve original image
+        source_tokens_to_edit=args.source_tokens,
+        factor=args.factor,
         sentence_pairs=variation_data["sentence_pairs"],
-        prompt="a portrait of a man riding a donkey in the snow",
+        prompt=args.prompt,
         max_sequence_length=256
     )
     
     # Generate image
     output = model(
-        prompt="a portrait of a man riding a donkey in the snow",
+        prompt=args.prompt,
         guidance_scale=3.5,
         height=1024,
         width=1024,
@@ -49,8 +67,9 @@ def main():
     )
     
     # Save result
-    output.images[0].save("output.png")
-    print("Image saved to output.png")
+    output.images[0].save(args.output)
+    print(f"Image saved to {args.output}")
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(args)
