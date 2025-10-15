@@ -16,7 +16,9 @@ def main():
     ).to(device)
     
     # Load SAE model
-    sae = torch.load("path/to/your/sae_model.pt")
+    sae = GlobalBatchTopKMatryoshkaSAE.from_pretrained(
+                                        "Ronenk94/T5_matryoshka_sae",
+                                         device="cuda")
     
     # Load variation configuration
     with open("configs/variations/smiling_man.yaml", "r") as f:
