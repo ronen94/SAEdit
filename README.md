@@ -81,7 +81,7 @@ if __name__ == "__main__":
 ```
 
 ## Training
-
+We have made the [weights](https://huggingface.co/Ronenk94/T5_matryoshka_sae_top_300) of our model public in hugging face
 Training a new SAE model consists of two main steps:
 
 ### Step 1: Generate Embedding Dataset
