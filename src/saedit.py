@@ -2,6 +2,7 @@ import torch
 from typing import List, Optional,Tuple
 import torch.nn as nn
 from diffusers import DiffusionPipeline
+import numpy as np
 
 CALLBACK_ON_STEP_END_INPUT_TENSORS = ['prompt_embeds']
 

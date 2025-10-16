@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.autograd as autograd
-from src.models.sparse_autoencoders.sae_base import BaseAutoencoder
+from src.models.sae_base import BaseAutoencoder
 import torch
 import random
 import numpy as np

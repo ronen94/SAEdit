@@ -30,7 +30,8 @@ To run our method, insert the SAEdit block as a callback function as can be seen
 import torch
 import yaml
 from diffusers import FluxPipeline
-from saedit import SAEditCallback
+from src.saedit import SAEditCallback
+from src.models.matryoshka_sae import GlobalBatchTopKMatryoshkaSAE
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -42,7 +43,8 @@ def main():
     model = FluxPipeline.from_pretrained(
         "black-forest-labs/FLUX.1-dev",
         torch_dtype=torch.bfloat16
-    ).to(device)
+    )
+    model.enable_model_cpu_offload()
     
     # Load SAE model
     sae = GlobalBatchTopKMatryoshkaSAE.from_pretrained(

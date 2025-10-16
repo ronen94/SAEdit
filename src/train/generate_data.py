@@ -6,7 +6,7 @@ import numpy as np
 import time
 import argparse
 from torch.utils.data import DataLoader, Subset
-from transformers import T5EncoderModel
+from transformers import T5EncoderModel, AutoTokenizer
 import torch.distributed as dist
 from src.train.trainer import create_dataset
 import numcodecs
@@ -25,7 +25,6 @@ def get_t5_prompt_embeds(
         text_inputs=None,
         device="cuda",
         num_images_per_prompt: int = 1,
-        return_attention_mask: bool = False,
         text_encoder: T5EncoderModel = None,
 ):
     text_input_ids = text_inputs.input_ids
@@ -41,16 +40,16 @@ def get_t5_prompt_embeds(
     # duplicate text embeddings and attention mask for each generation per prompt, using mps friendly method
     prompt_embeds = prompt_embeds.repeat(1, num_images_per_prompt, 1)
     prompt_embeds = prompt_embeds.view(batch_size * num_images_per_prompt, seq_len, -1)
-    if return_attention_mask:
-        attention_mask = text_inputs.attention_mask.squeeze(1)
-        return prompt_embeds, attention_mask
-    return prompt_embeds
+    attention_mask = text_inputs.attention_mask.squeeze(1)
+    return prompt_embeds, attention_mask
+
 
 # Add argparse to allow text_encoder_path and output_base as script arguments
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate T5 embeddings in distributed mode")
-    parser.add_argument("--text_encoder_path", type=str, required=True, help="Path to the pretrained T5 encoder")
+    parser.add_argument("--text_encoder_path", type=str, required=True, help="Path to the pretrained encoder")
+    parser.add_argument("--text_tokenizer_path", type=str, required=True, help="Path to the tokenizer")
     parser.add_argument("--output_base", type=str, required=True, help="Base output directory for embeddings")
     parser.add_argument("--data_output_len", type=int, default=800_000_000, help="The length of the dataset created")
     return parser.parse_args()
@@ -66,6 +65,7 @@ def main():
     # Config
     data_row_number = args.data_output_len
     text_encoder_path = args.text_encoder_path
+    text_tokenizer_path = args.text_tokenizer_path
     output_base = args.output_base
     
     # Set device for this process
@@ -75,11 +75,12 @@ def main():
     # Load model on the assigned GPU
     text_encoder = T5EncoderModel.from_pretrained(text_encoder_path).to(device)
     text_encoder.eval()
+    text_tokenizer = AutoTokenizer.from_pretrained(text_tokenizer_path)
 
 
 
     # Dataset indexing - each process handles a slice
-    full_dataset = create_dataset(max_length=256)
+    full_dataset = create_dataset(max_length=256, tokenizer=text_tokenizer)
     total_len = len(full_dataset)
     
     
@@ -148,7 +149,6 @@ def main():
             text_inputs=batch, 
             text_encoder=text_encoder, 
             device=device,
-            return_attention_mask=True
         )
         
         bool_mask = attention.bool()

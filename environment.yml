@@ -7,12 +7,14 @@ dependencies:
   - pip:
     - accelerate==1.10.1
     - diffusers==0.35.1
+    - einops==0.8.1
     - hf-xet==1.1.10
     - huggingface-hub==0.35.3
     - numcodecs==0.12.1
     - numpy==2.0.2
     - pandas==2.3.3
     - pillow==11.3.0
+    - protobuf==6.32.1
     - psutil==7.1.0
     - pyyaml==6.0.3
     - safetensors==0.6.2
@@ -24,3 +26,4 @@ dependencies:
     - urllib3==2.5.0
     - zarr==2.18.2
     - zipp==3.23.0
+    - transformers==4.57.1

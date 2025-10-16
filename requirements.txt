@@ -1,6 +1,7 @@
 accelerate==1.10.1
 certifi==2025.10.5
 diffusers==0.35.1
+einops==0.8.1
 hf-xet==1.1.10
 huggingface-hub==0.35.3
 numcodecs==0.12.1
@@ -8,6 +9,7 @@ numpy==2.0.2
 packaging==25.0
 pandas==2.3.3
 pillow==11.3.0
+protobuf==6.32.1
 psutil==7.1.0
 PyYAML==6.0.3
 regex==2025.9.18
@@ -20,3 +22,4 @@ triton==3.4.0
 urllib3==2.5.0
 zarr==2.18.2
 zipp==3.23.0
+transformers==4.57.1
