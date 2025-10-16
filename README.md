@@ -93,10 +93,10 @@ To train a new SAE model two steps are required:
 
 ### Step 1: Generate Embedding Dataset
 
-First, generate a Zarr file containing T5 embeddings from your training dataset:
+First, generate a Zarr file containing T5 embeddings from your training dataset (should be ran with torchrun):
 
 ```bash
-python src/train/generate_data.py --dataset <your_dataset> --output_path ./data/t5_embeddings.zarr
+torchrun src/train/generate_data.py --text_encoder_path <The path of the text encoder e.g T5EncoderModel> --text_tokenizer_path <The path of the corresponding tokenizer> --output_path <the path of the output> --data_output_length <number of rows in the resulting dataset>
 ```
 
 This will create a Zarr file containing all T5 embeddings from your training dataset.

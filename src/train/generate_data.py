@@ -50,8 +50,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Generate T5 embeddings in distributed mode")
     parser.add_argument("--text_encoder_path", type=str, required=True, help="Path to the pretrained encoder")
     parser.add_argument("--text_tokenizer_path", type=str, required=True, help="Path to the tokenizer")
-    parser.add_argument("--output_base", type=str, required=True, help="Base output directory for embeddings")
-    parser.add_argument("--data_output_len", type=int, default=800_000_000, help="The length of the dataset created")
+    parser.add_argument("--output_path", type=str, required=True, help="Base output directory for embeddings")
+    parser.add_argument("--data_output_length", type=int, default=800_000_000, help="The length of the dataset created")
     return parser.parse_args()
 
 def main():
@@ -63,10 +63,10 @@ def main():
     local_rank = int(os.environ.get("LOCAL_RANK", 0))
     world_size = int(os.environ.get("WORLD_SIZE", 1))
     # Config
-    data_row_number = args.data_output_len
+    data_row_number = args.data_output_length
     text_encoder_path = args.text_encoder_path
     text_tokenizer_path = args.text_tokenizer_path
-    output_base = args.output_base
+    output_base = args.output_path
     
     # Set device for this process
     torch.cuda.set_device(local_rank)
